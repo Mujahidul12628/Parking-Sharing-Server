@@ -1,7 +1,8 @@
 const express = require('express');
 const cors = require('cors');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config();
-const SSLCommerzPayment = require('sslcommerz-lts')
+
 
 const app = express();
 const port = process.env.PORT || 5008;
@@ -10,7 +11,7 @@ const port = process.env.PORT || 5008;
 app.use(cors());
 app.use(express.json());
 
-const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.xuczi3d.mongodb.net/?retryWrites=true&w=majority`;
 console.log(uri);
 
@@ -24,14 +25,13 @@ const client = new MongoClient(uri, {
 });
 
 
-const store_id = process.env.SSL_Store_id;
-const store_passwd = process.env.SSL_Store_pass;
-const is_live = false //true for live, false for sandbox
+
+
 
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
-        await client.connect();
+        // await client.connect();
 
         const parkingCollection = client.db('parkingDB').collection('parking');
 

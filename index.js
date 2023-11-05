@@ -1,21 +1,18 @@
 const express = require('express');
-const cors = require('cors');
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const cors = require('cors');
+const app = express()
+const port = process.env.PORT || 5111;
 require('dotenv').config();
 
-
-const app = express();
-const port = process.env.PORT || 5008;
-
 // middleware
-app.use(cors());
-app.use(express.json());
+app.use(cors())
+app.use(express.json())
 
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.xuczi3d.mongodb.net/?retryWrites=true&w=majority`;
-console.log(uri);
 
-
+// Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
     serverApi: {
         version: ServerApiVersion.v1,
@@ -24,14 +21,8 @@ const client = new MongoClient(uri, {
     }
 });
 
-
-
-
-
 async function run() {
     try {
-        // Connect the client to the server	(optional starting in v4.7)
-        // await client.connect();
 
         const parkingCollection = client.db('parkingDB').collection('parking');
 
@@ -81,7 +72,6 @@ async function run() {
         })
 
 
-        // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
@@ -90,14 +80,10 @@ async function run() {
     }
 }
 run().catch(console.dir);
-
-
-
-
 app.get('/', (req, res) => {
-    res.send('parking making server is running')
+    res.send('decabo Server is Running');
 })
 
 app.listen(port, () => {
-    console.log(`parking Server is running on port: ${port}`)
+    console.log(`decabo Server run on port ${port}`);
 })

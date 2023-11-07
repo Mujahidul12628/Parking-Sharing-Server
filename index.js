@@ -21,10 +21,15 @@ const client = new MongoClient(uri, {
     }
 });
 
+const store_id = process.env.STORE_ID;
+const store_passwd = process.env.STORE_PASS;
+const is_live = false //true for live, false for sandbox
+
 async function run() {
     try {
 
         const parkingCollection = client.db('parkingDB').collection('parking');
+        const paymentCollection = client.db('parkingDB').collection('payment');
 
         app.get('/parking', async (req, res) => {
             const cursor = parkingCollection.find();
@@ -37,6 +42,21 @@ async function run() {
             console.log(newparking);
             const result = await parkingCollection.insertOne(newparking);
             res.send(result);
+        })
+
+        const transaction_ID = new ObjectId().toString();
+        app.post('/parkingData', async (req, res) => {
+            const id = req.body.id;
+            const payment = await paymentCollection.findOne({
+                _id: new ObjectId(id)
+            });
+            console.log(payment);
+            console.log('Payment ID from request:', req.body.id);
+
+            const paymentInformation = req.body;
+            console.log(paymentInformation);
+
+
         })
 
         app.delete('/parking/:id', async (req, res) => {
